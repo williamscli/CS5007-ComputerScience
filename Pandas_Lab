@@ -1,0 +1,1308 @@
+{
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/williamscli/CS5007-ComputerScience/blob/main/Pandas_Lab\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "vOwHARxcFOqA"
+      },
+      "source": [
+        "# Lab_2-0: Pandas Introduction\n",
+        "Please answer the questions by filling in the code where indicated below.\n",
+        "\n",
+        "## Part 1\n",
+        "The following code loads the olympics dataset (olympics.csv), which was derrived\n",
+        "from the Wikipedia entry on [All Time Olympic Games Medals](https://en.wikipedia.org/wiki/All-time_Olympic_Games_medal_table), and does some basic data cleaning.\n",
+        "\n",
+        "The columns are organized as # of Summer games, Summer medals, # of Winter\n",
+        "games, Winter medals, total # number of games, total # of medals. Use this\n",
+        "dataset to answer the questions below."
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 206
+        },
+        "id": "1BstdBFRFOqC",
+        "outputId": "4939a81f-0d69-46fd-9f3a-f1ba11f829e7"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "             # Summer  Gold  Silver  Bronze  Total  # Winter  Gold.1  \\\n",
+              "Afghanistan        13     0       0       2      2         0       0   \n",
+              "Algeria            12     5       2       8     15         3       0   \n",
+              "Argentina          23    18      24      28     70        18       0   \n",
+              "Armenia             5     1       2       9     12         6       0   \n",
+              "Australasia         2     3       4       5     12         0       0   \n",
+              "\n",
+              "             Silver.1  Bronze.1  Total.1  # Games  Gold.2  Silver.2  Bronze.2  \\\n",
+              "Afghanistan         0         0        0       13       0         0         2   \n",
+              "Algeria             0         0        0       15       5         2         8   \n",
+              "Argentina           0         0        0       41      18        24        28   \n",
+              "Armenia             0         0        0       11       1         2         9   \n",
+              "Australasia         0         0        0        2       3         4         5   \n",
+              "\n",
+              "             Combined total   ID  \n",
+              "Afghanistan               2  AFG  \n",
+              "Algeria                  15  ALG  \n",
+              "Argentina                70  ARG  \n",
+              "Armenia                  12  ARM  \n",
+              "Australasia              12  ANZ  "
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-03f7d5e8-088f-43e6-a41e-c3ae2a157c70\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th># Summer</th>\n",
+              "      <th>Gold</th>\n",
+              "      <th>Silver</th>\n",
+              "      <th>Bronze</th>\n",
+              "      <th>Total</th>\n",
+              "      <th># Winter</th>\n",
+              "      <th>Gold.1</th>\n",
+              "      <th>Silver.1</th>\n",
+              "      <th>Bronze.1</th>\n",
+              "      <th>Total.1</th>\n",
+              "      <th># Games</th>\n",
+              "      <th>Gold.2</th>\n",
+              "      <th>Silver.2</th>\n",
+              "      <th>Bronze.2</th>\n",
+              "      <th>Combined total</th>\n",
+              "      <th>ID</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>Afghanistan</th>\n",
+              "      <td>13</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>2</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>13</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>2</td>\n",
+              "      <td>AFG</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Algeria</th>\n",
+              "      <td>12</td>\n",
+              "      <td>5</td>\n",
+              "      <td>2</td>\n",
+              "      <td>8</td>\n",
+              "      <td>15</td>\n",
+              "      <td>3</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>15</td>\n",
+              "      <td>5</td>\n",
+              "      <td>2</td>\n",
+              "      <td>8</td>\n",
+              "      <td>15</td>\n",
+              "      <td>ALG</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Argentina</th>\n",
+              "      <td>23</td>\n",
+              "      <td>18</td>\n",
+              "      <td>24</td>\n",
+              "      <td>28</td>\n",
+              "      <td>70</td>\n",
+              "      <td>18</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>41</td>\n",
+              "      <td>18</td>\n",
+              "      <td>24</td>\n",
+              "      <td>28</td>\n",
+              "      <td>70</td>\n",
+              "      <td>ARG</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Armenia</th>\n",
+              "      <td>5</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2</td>\n",
+              "      <td>9</td>\n",
+              "      <td>12</td>\n",
+              "      <td>6</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>11</td>\n",
+              "      <td>1</td>\n",
+              "      <td>2</td>\n",
+              "      <td>9</td>\n",
+              "      <td>12</td>\n",
+              "      <td>ARM</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>Australasia</th>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>4</td>\n",
+              "      <td>5</td>\n",
+              "      <td>12</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>0</td>\n",
+              "      <td>2</td>\n",
+              "      <td>3</td>\n",
+              "      <td>4</td>\n",
+              "      <td>5</td>\n",
+              "      <td>12</td>\n",
+              "      <td>ANZ</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-03f7d5e8-088f-43e6-a41e-c3ae2a157c70')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-03f7d5e8-088f-43e6-a41e-c3ae2a157c70 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-03f7d5e8-088f-43e6-a41e-c3ae2a157c70');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 1
+        }
+      ],
+      "source": [
+        "import pandas as pd\n",
+        "\n",
+        "df = pd.read_csv('olympics.csv', index_col=0, skiprows=1)\n",
+        "\n",
+        "for col in df.columns:\n",
+        "    if col[:2]=='01':\n",
+        "        df.rename(columns={col:'Gold'+col[4:]}, inplace=True)\n",
+        "    if col[:2]=='02':\n",
+        "        df.rename(columns={col:'Silver'+col[4:]}, inplace=True)\n",
+        "    if col[:2]=='03':\n",
+        "        df.rename(columns={col:'Bronze'+col[4:]}, inplace=True)\n",
+        "    if col[:1]=='№':\n",
+        "        df.rename(columns={col:'#'+col[1:]}, inplace=True)\n",
+        "\n",
+        "names_ids = df.index.str.split('\\s\\(') # split the index by '('\n",
+        "\n",
+        "df.index = names_ids.str[0] # the [0] element is the country name (new index) \n",
+        "df['ID'] = names_ids.str[1].str[:3] # the [1] element is the abbreviation or ID (take first 3 characters from that)\n",
+        "\n",
+        "df = df.drop('Totals')\n",
+        "df.head()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "dyb3H3ipFOqH"
+      },
+      "source": [
+        "### Question 0 (Example)\n",
+        "\n",
+        "What is the first country in df?\n",
+        "**Afghanistan**\n",
+        "\n",
+        "*This function should return a Series.*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "O25lPIJSFOqI",
+        "outputId": "f86476d7-40d5-4162-d2be-a12013dc7078"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "# Summer           13\n",
+              "Gold                0\n",
+              "Silver              0\n",
+              "Bronze              2\n",
+              "Total               2\n",
+              "# Winter            0\n",
+              "Gold.1              0\n",
+              "Silver.1            0\n",
+              "Bronze.1            0\n",
+              "Total.1             0\n",
+              "# Games            13\n",
+              "Gold.2              0\n",
+              "Silver.2            0\n",
+              "Bronze.2            2\n",
+              "Combined total      2\n",
+              "ID                AFG\n",
+              "Name: Afghanistan, dtype: object"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 2
+        }
+      ],
+      "source": [
+        "# You should write your whole answer within the function provided. The autograder will call\n",
+        "# this function and compare the return value against the correct solution value\n",
+        "def answer_zero():\n",
+        "    # This function returns the row for Afghanistan, which is a Series object. The assignment\n",
+        "    # question description will tell you the general format the autograder is expecting\n",
+        "    return df.iloc[0]\n",
+        "\n",
+        "# You can examine what your function returns by calling it in the cell. If you have questions\n",
+        "# about the assignment formats, check out the discussion forums for any FAQs\n",
+        "answer_zero() "
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "YfGSnfztFOqI"
+      },
+      "source": [
+        "### Question 1\n",
+        "Which country has won the most gold medals in summer games?\n",
+        "**United States**\n",
+        "\n",
+        "*This function should return a single string value.*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "4jSnlRbZFOqI",
+        "outputId": "4592ab93-e273-47b0-8a5c-e794d200dc12"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'United States'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 3
+        }
+      ],
+      "source": [
+        "def answer_one():\n",
+        "    return df['Gold.2'].idxmax()\n",
+        "\n",
+        "answer_one()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "RtGOzx0KFOqI"
+      },
+      "source": [
+        "### Question 2\n",
+        "Which country had the biggest difference between their summer and winter gold\n",
+        "medal counts? **United States**\n",
+        "*This function should return a single string value.*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "tckfgaTTFOqJ",
+        "outputId": "b7727c89-1da5-443a-983b-c333c6819e7c"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'United States'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 4
+        }
+      ],
+      "source": [
+        "def answer_two():\n",
+        "    \"\"\"Finds difference between summer and gold medal counts\n",
+        "\n",
+        "    Returns\n",
+        "    Str value for country with the biggest difference in count\"\"\"\n",
+        "    return (df['Gold'] - df['Gold.1']).idxmax()\n",
+        "\n",
+        "answer_two()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "nBHrM8qKFOqJ"
+      },
+      "source": [
+        "### Question 3\n",
+        "Which country has the biggest difference between their summer gold medal counts\n",
+        "and winter gold medal counts relative to their total gold medal count?\n",
+        "**Bulgaria**\n",
+        "\n",
+        "$$\\frac{Summer~Gold - Winter~Gold}{Total~Gold}$$\n",
+        "\n",
+        "Only include countries that have won at least 1 gold in both summer and winter.\n",
+        "\n",
+        "*This function should return a single string value.*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "idPpb9VrFOqJ",
+        "outputId": "57080556-4f69-4fe9-b806-872c94f0faf2"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'Bulgaria'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 5
+        }
+      ],
+      "source": [
+        "def answer_three():\n",
+        "\n",
+        "    # Including countries with at least 1 Gold in both summer and winter\n",
+        "    elegible = df[(df['Gold'] >= 1) & (df['Gold.1'] >= 1)]\n",
+        "\n",
+        "    # Return str value of the country with the biggest difference between summer and winter gold medals\n",
+        "    return ((elegible['Gold'] - elegible['Gold.1']).abs() / elegible['Gold.2']).idxmax()\n",
+        "\n",
+        "answer_three()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "XnF3ntHGFOqJ"
+      },
+      "source": [
+        "### Question 4\n",
+        "Write a function that creates a Series called \"Points\" which is a weighted value\n",
+        "where each gold medal (`Gold.2`) counts for 3 points, silver medals (`Silver.2`)\n",
+        "for 2 points, and bronze medals (`Bronze.2`) for 1 point. The function should\n",
+        "return only the column (a Series object) which you created, with the country\n",
+        "names as indices.\n",
+        "\n",
+        "*This function should return a Series named `Points` of length 146*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "4xvaAkW0FOqK",
+        "outputId": "4ce507ac-d325-4a98-d166-121c0108395c"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "Afghanistan                           2.0\n",
+              "Algeria                              27.0\n",
+              "Argentina                           130.0\n",
+              "Armenia                              16.0\n",
+              "Australasia                          22.0\n",
+              "                                    ...  \n",
+              "Yugoslavia                          171.0\n",
+              "Independent Olympic Participants      4.0\n",
+              "Zambia                                3.0\n",
+              "Zimbabwe                             18.0\n",
+              "Mixed team                           38.0\n",
+              "Name: Points, Length: 146, dtype: float64"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 6
+        }
+      ],
+      "source": [
+        "import numpy as np\n",
+        "\n",
+        "def answer_four():\n",
+        "  \n",
+        "    # Create column named \"Points\" and set all values to zero\n",
+        "    df['Points'] = np.zeros(len(df))\n",
+        "    # Multiply Gold medal count by 3 and sum value in each row into the 'Points' column\n",
+        "    df['Points'] += df['Gold.2'] * 3\n",
+        "    # Multiply Silver medal count by 2 and sum value in each row into the 'Points' column\n",
+        "    df['Points'] += df['Silver.2'] * 2\n",
+        "    # Sum Bronze medal count in each row into the 'Points' column\n",
+        "    df['Points'] += df['Bronze.2']\n",
+        "\n",
+        "    return pd.Series(df['Points'], index = df.index)\n",
+        "\n",
+        "answer_four()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "YCuz0R7mFOqK"
+      },
+      "source": [
+        "## Part 2\n",
+        "For the next set of questions, we will be using census data from the [United States Census Bureau](http://www.census.gov). Counties are political and\n",
+        "geographic subdivisions of states in the United States. This dataset contains\n",
+        "population data for counties and states in the US from 2010 to 2015. [See this document](https://www2.census.gov/programs-surveys/popest/technical-documentation/file-layouts/2010-2015/co-est2015-alldata.pdf) for a description\n",
+        "of the variable names.\n",
+        "\n",
+        "The census dataset (census.csv) should be loaded as census_df. Answer questions\n",
+        "using this as appropriate.\n",
+        "\n",
+        "### Question 5\n",
+        "Which state has the most counties in it? (hint: consider the sumlevel key\n",
+        "carefully! You'll need this for future questions too...)\n",
+        "\n",
+        "*This function should return a single string value.*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 369
+        },
+        "id": "Yuh0sCwaFOqK",
+        "outputId": "3a8937ff-39bc-4f61-f3cd-4912fa2fdeb9"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "   SUMLEV  REGION  DIVISION  STATE  COUNTY   STNAME         CTYNAME  \\\n",
+              "0      40       3         6      1       0  Alabama         Alabama   \n",
+              "1      50       3         6      1       1  Alabama  Autauga County   \n",
+              "2      50       3         6      1       3  Alabama  Baldwin County   \n",
+              "3      50       3         6      1       5  Alabama  Barbour County   \n",
+              "4      50       3         6      1       7  Alabama     Bibb County   \n",
+              "\n",
+              "   CENSUS2010POP  ESTIMATESBASE2010  POPESTIMATE2010  ...  RDOMESTICMIG2011  \\\n",
+              "0        4779736            4780127          4785161  ...          0.002295   \n",
+              "1          54571              54571            54660  ...          7.242091   \n",
+              "2         182265             182265           183193  ...         14.832960   \n",
+              "3          27457              27457            27341  ...         -4.728132   \n",
+              "4          22915              22919            22861  ...         -5.527043   \n",
+              "\n",
+              "   RDOMESTICMIG2012  RDOMESTICMIG2013  RDOMESTICMIG2014  RDOMESTICMIG2015  \\\n",
+              "0         -0.193196          0.381066          0.582002         -0.467369   \n",
+              "1         -2.915927         -3.012349          2.265971         -2.530799   \n",
+              "2         17.647293         21.845705         19.243287         17.197872   \n",
+              "3         -2.500690         -7.056824         -3.904217        -10.543299   \n",
+              "4         -5.068871         -6.201001         -0.177537          0.177258   \n",
+              "\n",
+              "   RNETMIG2011  RNETMIG2012  RNETMIG2013  RNETMIG2014  RNETMIG2015  \n",
+              "0     1.030015     0.826644     1.383282     1.724718     0.712594  \n",
+              "1     7.606016    -2.626146    -2.722002     2.592270    -2.187333  \n",
+              "2    15.844176    18.559627    22.727626    20.317142    18.293499  \n",
+              "3    -4.874741    -2.758113    -7.167664    -3.978583   -10.543299  \n",
+              "4    -5.088389    -4.363636    -5.403729     0.754533     1.107861  \n",
+              "\n",
+              "[5 rows x 100 columns]"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-7c416c8a-93e6-49e4-a22e-e39b76ef6988\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>SUMLEV</th>\n",
+              "      <th>REGION</th>\n",
+              "      <th>DIVISION</th>\n",
+              "      <th>STATE</th>\n",
+              "      <th>COUNTY</th>\n",
+              "      <th>STNAME</th>\n",
+              "      <th>CTYNAME</th>\n",
+              "      <th>CENSUS2010POP</th>\n",
+              "      <th>ESTIMATESBASE2010</th>\n",
+              "      <th>POPESTIMATE2010</th>\n",
+              "      <th>...</th>\n",
+              "      <th>RDOMESTICMIG2011</th>\n",
+              "      <th>RDOMESTICMIG2012</th>\n",
+              "      <th>RDOMESTICMIG2013</th>\n",
+              "      <th>RDOMESTICMIG2014</th>\n",
+              "      <th>RDOMESTICMIG2015</th>\n",
+              "      <th>RNETMIG2011</th>\n",
+              "      <th>RNETMIG2012</th>\n",
+              "      <th>RNETMIG2013</th>\n",
+              "      <th>RNETMIG2014</th>\n",
+              "      <th>RNETMIG2015</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>0</th>\n",
+              "      <td>40</td>\n",
+              "      <td>3</td>\n",
+              "      <td>6</td>\n",
+              "      <td>1</td>\n",
+              "      <td>0</td>\n",
+              "      <td>Alabama</td>\n",
+              "      <td>Alabama</td>\n",
+              "      <td>4779736</td>\n",
+              "      <td>4780127</td>\n",
+              "      <td>4785161</td>\n",
+              "      <td>...</td>\n",
+              "      <td>0.002295</td>\n",
+              "      <td>-0.193196</td>\n",
+              "      <td>0.381066</td>\n",
+              "      <td>0.582002</td>\n",
+              "      <td>-0.467369</td>\n",
+              "      <td>1.030015</td>\n",
+              "      <td>0.826644</td>\n",
+              "      <td>1.383282</td>\n",
+              "      <td>1.724718</td>\n",
+              "      <td>0.712594</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1</th>\n",
+              "      <td>50</td>\n",
+              "      <td>3</td>\n",
+              "      <td>6</td>\n",
+              "      <td>1</td>\n",
+              "      <td>1</td>\n",
+              "      <td>Alabama</td>\n",
+              "      <td>Autauga County</td>\n",
+              "      <td>54571</td>\n",
+              "      <td>54571</td>\n",
+              "      <td>54660</td>\n",
+              "      <td>...</td>\n",
+              "      <td>7.242091</td>\n",
+              "      <td>-2.915927</td>\n",
+              "      <td>-3.012349</td>\n",
+              "      <td>2.265971</td>\n",
+              "      <td>-2.530799</td>\n",
+              "      <td>7.606016</td>\n",
+              "      <td>-2.626146</td>\n",
+              "      <td>-2.722002</td>\n",
+              "      <td>2.592270</td>\n",
+              "      <td>-2.187333</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2</th>\n",
+              "      <td>50</td>\n",
+              "      <td>3</td>\n",
+              "      <td>6</td>\n",
+              "      <td>1</td>\n",
+              "      <td>3</td>\n",
+              "      <td>Alabama</td>\n",
+              "      <td>Baldwin County</td>\n",
+              "      <td>182265</td>\n",
+              "      <td>182265</td>\n",
+              "      <td>183193</td>\n",
+              "      <td>...</td>\n",
+              "      <td>14.832960</td>\n",
+              "      <td>17.647293</td>\n",
+              "      <td>21.845705</td>\n",
+              "      <td>19.243287</td>\n",
+              "      <td>17.197872</td>\n",
+              "      <td>15.844176</td>\n",
+              "      <td>18.559627</td>\n",
+              "      <td>22.727626</td>\n",
+              "      <td>20.317142</td>\n",
+              "      <td>18.293499</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3</th>\n",
+              "      <td>50</td>\n",
+              "      <td>3</td>\n",
+              "      <td>6</td>\n",
+              "      <td>1</td>\n",
+              "      <td>5</td>\n",
+              "      <td>Alabama</td>\n",
+              "      <td>Barbour County</td>\n",
+              "      <td>27457</td>\n",
+              "      <td>27457</td>\n",
+              "      <td>27341</td>\n",
+              "      <td>...</td>\n",
+              "      <td>-4.728132</td>\n",
+              "      <td>-2.500690</td>\n",
+              "      <td>-7.056824</td>\n",
+              "      <td>-3.904217</td>\n",
+              "      <td>-10.543299</td>\n",
+              "      <td>-4.874741</td>\n",
+              "      <td>-2.758113</td>\n",
+              "      <td>-7.167664</td>\n",
+              "      <td>-3.978583</td>\n",
+              "      <td>-10.543299</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>4</th>\n",
+              "      <td>50</td>\n",
+              "      <td>3</td>\n",
+              "      <td>6</td>\n",
+              "      <td>1</td>\n",
+              "      <td>7</td>\n",
+              "      <td>Alabama</td>\n",
+              "      <td>Bibb County</td>\n",
+              "      <td>22915</td>\n",
+              "      <td>22919</td>\n",
+              "      <td>22861</td>\n",
+              "      <td>...</td>\n",
+              "      <td>-5.527043</td>\n",
+              "      <td>-5.068871</td>\n",
+              "      <td>-6.201001</td>\n",
+              "      <td>-0.177537</td>\n",
+              "      <td>0.177258</td>\n",
+              "      <td>-5.088389</td>\n",
+              "      <td>-4.363636</td>\n",
+              "      <td>-5.403729</td>\n",
+              "      <td>0.754533</td>\n",
+              "      <td>1.107861</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "<p>5 rows × 100 columns</p>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-7c416c8a-93e6-49e4-a22e-e39b76ef6988')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-7c416c8a-93e6-49e4-a22e-e39b76ef6988 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-7c416c8a-93e6-49e4-a22e-e39b76ef6988');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 7
+        }
+      ],
+      "source": [
+        "census_df = pd.read_csv('census.csv')\n",
+        "\n",
+        "census_df.head()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "class Census_Variables:\n",
+        "  # SUMLEV value 50 is county level\n",
+        "  county_level = 50\n",
+        "  summary_level = \"SUMLEV\""
+      ],
+      "metadata": {
+        "id": "FYnj3okANq0k"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "source": [
+        "# Filter out non-county data\n",
+        "counties = census_df[census_df[\n",
+        "    Census_Variables.summary_level]==Census_Variables.county_level]\n",
+        "\n",
+        "# Reset index\n",
+        "counties = counties.reset_index()"
+      ],
+      "metadata": {
+        "id": "KZ2Rivw5ODE7"
+      },
+      "execution_count": null,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "fgrMi679FOqK",
+        "outputId": "ba568c8f-07b0-401a-f0ce-006161493e79"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'Texas'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 13
+        }
+      ],
+      "source": [
+        "def answer_five():\n",
+        "    \"\"\" Finds state with the most counties\n",
+        "\n",
+        "    Returns\n",
+        "\n",
+        "    str name of state with the most counties\"\"\"\n",
+        "\n",
+        "    return counties.groupby('STNAME').count().COUNTY.loc[counties['STNAME']].idxmax()\n",
+        "\n",
+        "answer_five()    "
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "qi0NKy6CFOqK"
+      },
+      "source": [
+        "### Question 6\n",
+        "**Only looking at the three most populous counties for each state**, what are\n",
+        "the three most populous states (in order of highest population to lowest\n",
+        "population)? Use `CENSUS2010POP`.\n",
+        "\n",
+        "*This function should return a list of string values.*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/"
+        },
+        "id": "sVQc-EX7FOqL",
+        "outputId": "4e1e525d-b2bf-46e4-a7d2-613b8022cea4"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "['California', 'Texas', 'Illinois']"
+            ]
+          },
+          "metadata": {},
+          "execution_count": 14
+        }
+      ],
+      "source": [
+        "def answer_six():\n",
+        "    \n",
+        "    # Group by State and focus on the 3 largest CENSUS2010POP numbers\n",
+        "    top_three = counties.groupby('STNAME').CENSUS2010POP.nlargest(3)\n",
+        "    # Sum population values\n",
+        "    States = top_three.groupby(level=0).sum()\n",
+        "    \n",
+        "    # Return list of the top 3 largest states by population\n",
+        "    return list(States.nlargest(3).index)\n",
+        "\n",
+        "answer_six()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "NFcLWMXTFOqL"
+      },
+      "source": [
+        "### Question 7\n",
+        "Which county has had the largest absolute change in population within the period\n",
+        "2010-2015? (Hint: population values are stored in columns POPESTIMATE2010\n",
+        "through POPESTIMATE2015, you need to consider all six columns.)\n",
+        "\n",
+        "e.g. If County Population in the 5 year period is 100, 120, 80, 105, 100, 130,\n",
+        "then its largest change in the period would be |130-80| = 50.\n",
+        "\n",
+        "*This function should return a single string value.*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "id": "jAqzlzwAFOqL",
+        "outputId": "b7898978-6907-4c64-fb64-3e95ac7aae90"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "'Harris County'"
+            ],
+            "application/vnd.google.colaboratory.intrinsic+json": {
+              "type": "string"
+            }
+          },
+          "metadata": {},
+          "execution_count": 16
+        }
+      ],
+      "source": [
+        "def answer_seven():\n",
+        "    \n",
+        "    counties['MaxPop'] = counties[['POPESTIMATE2010','POPESTIMATE2011','POPESTIMATE2012','POPESTIMATE2013','POPESTIMATE2014','POPESTIMATE2015']].max(axis=1)\n",
+        "    counties['MinPop'] = counties[['POPESTIMATE2010','POPESTIMATE2011','POPESTIMATE2012','POPESTIMATE2013','POPESTIMATE2014','POPESTIMATE2015']].min(axis=1)\n",
+        "    \n",
+        "    return counties.iloc[(counties['MaxPop']-counties['MinPop']).argmax()].CTYNAME\n",
+        "\n",
+        "answer_seven()"
+      ]
+    },
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "MOkbTwZuFOqL"
+      },
+      "source": [
+        "### Question 8\n",
+        "In this datafile, the United States is broken up into four regions using the\n",
+        "\"REGION\" column.\n",
+        "\n",
+        "Create a query that finds the counties that belong to regions 1 or 2, whose name\n",
+        "starts with 'Washington', and whose POPESTIMATE2015 was greater than their\n",
+        "POPESTIMATE 2014.\n",
+        "\n",
+        "*This function should return a 5x2 DataFrame with the columns = ['STNAME',\n",
+        "'CTYNAME'] and the same index ID as the census_df (sorted ascending by index).*"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "execution_count": null,
+      "metadata": {
+        "id": "1sbuE4qRFOqL",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 206
+        },
+        "outputId": "5ad0e525-e79b-4c7c-bbb4-153d0cbb674b"
+      },
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "            STNAME            CTYNAME\n",
+              "896           Iowa  Washington County\n",
+              "1419     Minnesota  Washington County\n",
+              "2345  Pennsylvania  Washington County\n",
+              "2355  Rhode Island  Washington County\n",
+              "3163     Wisconsin  Washington County"
+            ],
+            "text/html": [
+              "\n",
+              "  <div id=\"df-1013406b-03ff-4372-9fcc-7c3a1c7b47d0\">\n",
+              "    <div class=\"colab-df-container\">\n",
+              "      <div>\n",
+              "<style scoped>\n",
+              "    .dataframe tbody tr th:only-of-type {\n",
+              "        vertical-align: middle;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe tbody tr th {\n",
+              "        vertical-align: top;\n",
+              "    }\n",
+              "\n",
+              "    .dataframe thead th {\n",
+              "        text-align: right;\n",
+              "    }\n",
+              "</style>\n",
+              "<table border=\"1\" class=\"dataframe\">\n",
+              "  <thead>\n",
+              "    <tr style=\"text-align: right;\">\n",
+              "      <th></th>\n",
+              "      <th>STNAME</th>\n",
+              "      <th>CTYNAME</th>\n",
+              "    </tr>\n",
+              "  </thead>\n",
+              "  <tbody>\n",
+              "    <tr>\n",
+              "      <th>896</th>\n",
+              "      <td>Iowa</td>\n",
+              "      <td>Washington County</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>1419</th>\n",
+              "      <td>Minnesota</td>\n",
+              "      <td>Washington County</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2345</th>\n",
+              "      <td>Pennsylvania</td>\n",
+              "      <td>Washington County</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>2355</th>\n",
+              "      <td>Rhode Island</td>\n",
+              "      <td>Washington County</td>\n",
+              "    </tr>\n",
+              "    <tr>\n",
+              "      <th>3163</th>\n",
+              "      <td>Wisconsin</td>\n",
+              "      <td>Washington County</td>\n",
+              "    </tr>\n",
+              "  </tbody>\n",
+              "</table>\n",
+              "</div>\n",
+              "      <button class=\"colab-df-convert\" onclick=\"convertToInteractive('df-1013406b-03ff-4372-9fcc-7c3a1c7b47d0')\"\n",
+              "              title=\"Convert this dataframe to an interactive table.\"\n",
+              "              style=\"display:none;\">\n",
+              "        \n",
+              "  <svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\"viewBox=\"0 0 24 24\"\n",
+              "       width=\"24px\">\n",
+              "    <path d=\"M0 0h24v24H0V0z\" fill=\"none\"/>\n",
+              "    <path d=\"M18.56 5.44l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94zm-11 1L8.5 8.5l.94-2.06 2.06-.94-2.06-.94L8.5 2.5l-.94 2.06-2.06.94zm10 10l.94 2.06.94-2.06 2.06-.94-2.06-.94-.94-2.06-.94 2.06-2.06.94z\"/><path d=\"M17.41 7.96l-1.37-1.37c-.4-.4-.92-.59-1.43-.59-.52 0-1.04.2-1.43.59L10.3 9.45l-7.72 7.72c-.78.78-.78 2.05 0 2.83L4 21.41c.39.39.9.59 1.41.59.51 0 1.02-.2 1.41-.59l7.78-7.78 2.81-2.81c.8-.78.8-2.07 0-2.86zM5.41 20L4 18.59l7.72-7.72 1.47 1.35L5.41 20z\"/>\n",
+              "  </svg>\n",
+              "      </button>\n",
+              "      \n",
+              "  <style>\n",
+              "    .colab-df-container {\n",
+              "      display:flex;\n",
+              "      flex-wrap:wrap;\n",
+              "      gap: 12px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert {\n",
+              "      background-color: #E8F0FE;\n",
+              "      border: none;\n",
+              "      border-radius: 50%;\n",
+              "      cursor: pointer;\n",
+              "      display: none;\n",
+              "      fill: #1967D2;\n",
+              "      height: 32px;\n",
+              "      padding: 0 0 0 0;\n",
+              "      width: 32px;\n",
+              "    }\n",
+              "\n",
+              "    .colab-df-convert:hover {\n",
+              "      background-color: #E2EBFA;\n",
+              "      box-shadow: 0px 1px 2px rgba(60, 64, 67, 0.3), 0px 1px 3px 1px rgba(60, 64, 67, 0.15);\n",
+              "      fill: #174EA6;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert {\n",
+              "      background-color: #3B4455;\n",
+              "      fill: #D2E3FC;\n",
+              "    }\n",
+              "\n",
+              "    [theme=dark] .colab-df-convert:hover {\n",
+              "      background-color: #434B5C;\n",
+              "      box-shadow: 0px 1px 3px 1px rgba(0, 0, 0, 0.15);\n",
+              "      filter: drop-shadow(0px 1px 2px rgba(0, 0, 0, 0.3));\n",
+              "      fill: #FFFFFF;\n",
+              "    }\n",
+              "  </style>\n",
+              "\n",
+              "      <script>\n",
+              "        const buttonEl =\n",
+              "          document.querySelector('#df-1013406b-03ff-4372-9fcc-7c3a1c7b47d0 button.colab-df-convert');\n",
+              "        buttonEl.style.display =\n",
+              "          google.colab.kernel.accessAllowed ? 'block' : 'none';\n",
+              "\n",
+              "        async function convertToInteractive(key) {\n",
+              "          const element = document.querySelector('#df-1013406b-03ff-4372-9fcc-7c3a1c7b47d0');\n",
+              "          const dataTable =\n",
+              "            await google.colab.kernel.invokeFunction('convertToInteractive',\n",
+              "                                                     [key], {});\n",
+              "          if (!dataTable) return;\n",
+              "\n",
+              "          const docLinkHtml = 'Like what you see? Visit the ' +\n",
+              "            '<a target=\"_blank\" href=https://colab.research.google.com/notebooks/data_table.ipynb>data table notebook</a>'\n",
+              "            + ' to learn more about interactive tables.';\n",
+              "          element.innerHTML = '';\n",
+              "          dataTable['output_type'] = 'display_data';\n",
+              "          await google.colab.output.renderOutput(dataTable, element);\n",
+              "          const docLink = document.createElement('div');\n",
+              "          docLink.innerHTML = docLinkHtml;\n",
+              "          element.appendChild(docLink);\n",
+              "        }\n",
+              "      </script>\n",
+              "    </div>\n",
+              "  </div>\n",
+              "  "
+            ]
+          },
+          "metadata": {},
+          "execution_count": 19
+        }
+      ],
+      "source": [
+        "def answer_eight():\n",
+        "    query = census_df[ (census_df['SUMLEV'] == 50) & (census_df['REGION'] <=2) & (census_df['CTYNAME'].str.startswith(\"Washington\")) & (census_df['POPESTIMATE2015'] > census_df['POPESTIMATE2014'])]\n",
+        "    return query[['STNAME', 'CTYNAME']].sort_index()\n",
+        "\n",
+        "answer_eight()"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "source": [],
+      "metadata": {
+        "id": "Eu9E25g0mcQp"
+      },
+      "execution_count": null,
+      "outputs": []
+    }
+  ],
+  "metadata": {
+    "colab": {
+      "provenance": [],
+      "collapsed_sections": [],
+      "include_colab_link": true
+    },
+    "language_info": {
+      "name": "python"
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "nbformat": 4,
+  "nbformat_minor": 0
+}
